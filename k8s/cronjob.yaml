@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: model-retrain
+spec:
+  schedule: "0 2 * * 0"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: trainer
+            image: aditya2809/raildrishti-gateway:latest
+            command: ["python", "model/train_model.py"]
+          restartPolicy: OnFailure
