@@ -1,0 +1,42 @@
+
+
+services:
+  gateway:
+    build: .
+    container_name: raildrishti-gateway
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./model:/app/model
+    env_file:
+      - .env
+
+  simulator:
+    build: .
+    container_name: raildrishti-simulator
+    command: python app/simulator.py
+    depends_on:
+      - gateway
+    environment:
+      - GATEWAY_URL=http://gateway:8000/trains/update
+
+  dashboard:
+    build: .
+    container_name: raildrishti-dashboard
+    command: streamlit run app/dashboard.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - gateway
+    environment:
+      - GATEWAY_URL=http://gateway:8000
+
+  alert-worker:
+    build: .
+    container_name: raildrishti-alerts
+    command: python app/alert_worker.py
+    depends_on:
+      - gateway
+    env_file:
+      - .env

@@ -1,0 +1,20 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pkl
+
+# Environment
+.env
+
+# Database
+*.db
+
+# Data files
+data/
+
+# OS
+desktop.ini
+*.lnk
+
+# Don't go outside project folder
